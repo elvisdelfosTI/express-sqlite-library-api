@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev" : "node --watch src/index.js"
+  }
+}
