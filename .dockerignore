@@ -3,3 +3,5 @@ node_modules
 books.db
 database.db
 .env
+.git*
+*.md
