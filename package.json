@@ -5,6 +5,6 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev" : "node --watch src/index.js"
+    "dev" : "node --watch --trace-warnings src/index.js"
   }
 }

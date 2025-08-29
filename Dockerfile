@@ -1,20 +1,32 @@
-# Imagen base ligera
-FROM node:18-alpine
+# Etapa 1: Build con esbuild
+FROM alpine:3.19 AS builder
 
-# Crear directorio de trabajo
+RUN apk add --no-cache nodejs npm
+
 WORKDIR /app
 
-# Copiar solo archivos necesarios para instalar dependencias
-COPY package*.json ./
+COPY package.json package-lock.json ./
+RUN npm ci --only=production
 
-# Instalar solo dependencias de producción
-RUN npm install --only=production
-
-# Copiar el resto del código
 COPY . .
 
-# Exponer el puerto
-EXPOSE 3000
+RUN npx esbuild src/index.js \
+  --bundle \
+  --platform=node \
+  --target=node18 \
+  --minify \
+  --outfile=dist/index.js
 
-# Comando para iniciar la app
-CMD ["node", "src/index.js"]
+# Etapa 2: Imagen final ultra ligera
+FROM alpine:3.19
+
+RUN apk add --no-cache nodejs
+
+WORKDIR /app
+
+# Copia solo lo necesario
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist/index.js ./index.js
+
+CMD ["node", "index.js"]

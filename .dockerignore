@@ -1,7 +1,9 @@
 node_modules
+.git
 *.log
-books.db
-database.db
-.env
-.git*
 *.md
+*.db
+*.tar
+.env
+docker-compose.yml
+.dockerignore*
